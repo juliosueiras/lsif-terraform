@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.0.1";
   src = ./.;
 
-  modSha256 = "1mb3169vdlv4h10k15pg88s48s2b6y7v5frk9j9ahg52grygcqb2"; 
+  modSha256 = "1v6ibippl2f6cw45l6dlsid7k8skxn4kcyv25qdj848i83546638"; 
   
   goPackagePath = "github.com/juliosueiras/lsif-terraform";
   subPackages = [ "." ];

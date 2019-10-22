@@ -5,24 +5,22 @@ import (
 	"bytes"
 	"fmt"
 	"go/ast"
-	"go/token"
 	"go/types"
 	"strings"
 
+	"github.com/hashicorp/hcl/v2"
 	"github.com/juliosueiras/lsif-terraform/protocol"
 	doc "github.com/slimsag/godocmd"
 	"golang.org/x/tools/go/ast/astutil"
 )
 
-// lspRange transforms go/token.Position (1-based) to LSP start and end ranges (0-based)
-// which takes in consideration of identifier's name length.
-func lspRange(pos token.Position, name string) (start protocol.Pos, end protocol.Pos) {
+func lspRange(pos hcl.Range) (start protocol.Pos, end protocol.Pos) {
 	return protocol.Pos{
-			Line:      pos.Line - 1,
-			Character: pos.Column - 1,
+			Line:      pos.Start.Line - 1,
+			Character: pos.Start.Column - 1,
 		}, protocol.Pos{
-			Line:      pos.Line - 1,
-			Character: pos.Column - 1 + len(name),
+			Line:      pos.End.Line - 1,
+			Character: pos.End.Column - 1,
 		}
 }
 

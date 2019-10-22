@@ -194,6 +194,25 @@ func (e *indexer) indexPkg(p *packages.Package, proID string) (err error) {
 			fi = &fileInfo{docID: docID}
 			e.files[fpos.Filename] = fi
 		}
+		if !ok {
+			docID, err := e.emitDocument(fpos.Filename)
+			if err != nil {
+				return fmt.Errorf(`emit "document": %v`, err)
+			}
+
+			_, err = e.emitBeginEvent("document", docID)
+			if err != nil {
+				return fmt.Errorf(`emit "begin": %v`, err)
+			}
+
+			_, err = e.emitContains(proID, []string{docID})
+			if err != nil {
+				return fmt.Errorf(`emit "contains": %v`, err)
+			}
+
+			fi = &fileInfo{docID: docID}
+			e.files[fpos.Filename] = fi
+		}
 
 		if err = e.addImports(p, f, fi); err != nil {
 			return fmt.Errorf("error indexing imports of %q: %v", p.PkgPath, err)
